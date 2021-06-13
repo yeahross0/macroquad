@@ -86,6 +86,7 @@ pub fn play_sound_once(sound: Sound) {
         PlaySoundParams {
             looped: false,
             volume: 1.0,
+            speed: 1.0,
         },
     );
 }
@@ -93,6 +94,7 @@ pub fn play_sound_once(sound: Sound) {
 pub struct PlaySoundParams {
     pub looped: bool,
     pub volume: f32,
+    pub speed: f32,
 }
 
 pub fn play_sound(sound: Sound, params: PlaySoundParams) {
@@ -106,7 +108,7 @@ pub fn stop_sound(sound: Sound) {
     let ctx = &mut get_context().audio_context;
     let sound = &mut ctx.sounds.get_mut(&sound.0).unwrap();
 
-    sound.stop(&mut ctx.native_ctx);
+    sound.stop();
 }
 
 pub fn set_sound_volume(sound: Sound, volume: f32) {

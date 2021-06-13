@@ -1,4 +1,4 @@
-use rodio::{OutputStream, OutputStreamHandle, Sink};
+use rodio::{OutputStream, OutputStreamHandle, Sink, Source};
 
 use crate::audio::PlaySoundParams;
 
@@ -46,9 +46,24 @@ impl Sound {
     }
 
     pub fn play(&mut self, ctx: &mut AudioContext, params: PlaySoundParams) {
-        self.stop(ctx);
+        self.stop();
 
         self.looped = params.looped;
+
+        let sink_once = Sink::try_new(&ctx.handle).unwrap();
+        let sink_looped = Sink::try_new(&ctx.handle).unwrap();
+        sink_once.pause();
+        sink_looped.pause();
+
+        let decoder = rodio::Decoder::new(std::io::Cursor::new(self.source.clone())).unwrap();
+        sink_once.append(decoder.speed(params.speed));
+
+        let decoder =
+            rodio::Decoder::new_looped(std::io::Cursor::new(self.source.clone())).unwrap();
+        sink_looped.append(decoder.speed(params.speed));
+
+        self.sink_once = sink_once;
+        self.sink_looped = sink_looped;
 
         if self.looped {
             self.sink_looped.set_volume(params.volume);
@@ -59,16 +74,16 @@ impl Sound {
         }
     }
 
-    pub fn stop(&mut self, ctx: &mut AudioContext) {
+    pub fn stop(&mut self) {
         self.sink_once.stop();
         self.sink_looped.stop();
 
-        let sink_once = Sink::try_new(&ctx.handle).unwrap();
+        /*let sink_once = Sink::try_new(&ctx.handle).unwrap();
         let sink_looped = Sink::try_new(&ctx.handle).unwrap();
         sink_once.pause();
-        sink_looped.pause();
+        sink_looped.pause();*/
 
-        let decoder = rodio::Decoder::new(std::io::Cursor::new(self.source.clone())).unwrap();
+        /*let decoder = rodio::Decoder::new(std::io::Cursor::new(self.source.clone())).unwrap();
         sink_once.append(decoder);
 
         let decoder =
@@ -76,7 +91,7 @@ impl Sound {
         sink_looped.append(decoder);
 
         self.sink_once = sink_once;
-        self.sink_looped = sink_looped;
+        self.sink_looped = sink_looped;*/
     }
 
     pub fn set_volume(&mut self, volume: f32) {

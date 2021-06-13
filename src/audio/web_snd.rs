@@ -44,10 +44,10 @@ impl Sound {
     }
 
     pub fn play(&mut self, _ctx: &mut AudioContext, params: PlaySoundParams) {
-        unsafe { audio_play_buffer(self.0, params.volume, params.volume, 1.0, params.looped) }
+        unsafe { audio_play_buffer(self.0, params.volume, params.volume, params.speed, params.looped) }
     }
 
-    pub fn stop(&mut self, _ctx: &mut AudioContext) {
+    pub fn stop(&mut self) {
         unsafe { audio_source_stop(self.0) }
     }
 
