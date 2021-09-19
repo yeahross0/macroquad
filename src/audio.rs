@@ -111,6 +111,20 @@ pub fn stop_sound(sound: Sound) {
     sound.stop();
 }
 
+pub fn pause_sound(sound: Sound) -> bool {
+    let ctx = &mut get_context().audio_context;
+    let sound = &mut ctx.sounds.get_mut(&sound.0).unwrap();
+
+    sound.pause()
+}
+
+pub fn resume_sound(sound: Sound) {
+    let ctx = &mut get_context().audio_context;
+    let sound = &mut ctx.sounds.get_mut(&sound.0).unwrap();
+
+    sound.resume();
+}
+
 pub fn set_sound_volume(sound: Sound, volume: f32) {
     let ctx = &mut get_context().audio_context;
     let sound = &mut ctx.sounds.get_mut(&sound.0).unwrap();

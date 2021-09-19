@@ -51,6 +51,15 @@ impl Sound {
         unsafe { audio_source_stop(self.0) }
     }
 
+    pub fn pause(&mut self) -> bool {
+        unsafe { audio_source_stop(self.0) }
+        false
+    }
+
+    pub fn resume(&mut self) {
+        // TODO:
+    }
+
     pub fn set_volume(&mut self, volume: f32) {
         unsafe { audio_source_set_volume(self.0, volume, volume) }
     }

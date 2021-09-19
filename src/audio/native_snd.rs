@@ -94,6 +94,21 @@ impl Sound {
         self.sink_looped = sink_looped;*/
     }
 
+    pub fn pause(&mut self) -> bool {
+        self.sink_once.pause();
+        self.sink_looped.pause();
+
+        !self.sink_once.empty() || !self.sink_looped.empty()
+    }
+
+    pub fn resume(&mut self) {
+        if self.looped {
+            self.sink_looped.play();
+        } else {
+            self.sink_once.play();
+        }
+    }
+
     pub fn set_volume(&mut self, volume: f32) {
         if self.looped {
             self.sink_looped.set_volume(volume);
