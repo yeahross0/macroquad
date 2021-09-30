@@ -32,7 +32,7 @@ fontdue = "0.5.0"
 bumpalo = "3.4"
 
 [target.'cfg(not(any(target_arch = "wasm32", target_os = "android")))'.dependencies]
-rodio = { version = "0.13.0", optional=true, default-features = false, features = ["wav", "vorbis"] }
+rodio = { version = "0.14.0", optional=true, default-features = false, features = ["wav", "vorbis"] }
 
 [dev-dependencies]
 macroquad-particles = { path = "./particles" }

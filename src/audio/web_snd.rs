@@ -7,6 +7,8 @@ extern "C" {
     fn audio_source_is_loaded(buffer: u32) -> bool;
     fn audio_source_set_volume(buffer: u32, volume_l: f32, volume_r: f32);
     fn audio_source_stop(buffer: u32);
+    fn audio_context_pause();
+    fn audio_context_resume();
 }
 
 #[no_mangle]
@@ -52,12 +54,12 @@ impl Sound {
     }
 
     pub fn pause(&mut self) -> bool {
-        unsafe { audio_source_stop(self.0) }
-        false
+        unsafe { audio_context_pause() }
+        true
     }
 
     pub fn resume(&mut self) {
-        // TODO:
+        unsafe { audio_context_resume() }
     }
 
     pub fn set_volume(&mut self, volume: f32) {
